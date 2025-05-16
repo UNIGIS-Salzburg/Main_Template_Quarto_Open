@@ -1,0 +1,10 @@
+# Foreword {-}
+
+This document serves as a template for the creation of UNIGIS teaching materials in Quarto.
+
+> **Note:**  
+> This version of the template is intended for **public disclosure only**.  
+> Some internal elements such as **logos and branding images** have been removed.  
+> Authors working on actual course materials should use the **internal authoring version** of the template.
+
+Further information on working with Quarto that is not contained in this document can be found in the [Quarto documentation](https://quarto.org/docs/guide/){target="_blank"}.

@@ -1,0 +1,89 @@
+# Other {#other}
+
+Here are examples that are less common in typical module authoring but still useful.
+
+## WebR: Interactive R-code in browser
+
+Quarto offers a variety of extensions that can be added to the `_quarto.yml` file. These extensions can be used to enhance the book's functionality and appearance. A list of available extensions can be found [here](https://quarto.org/docs/extensions/){target="_blank"}. So far, the main extensions we use — such as `coatless/webr` and `custom-callouts` — are already included in this template. If you cloned or copied the repository, they should already be installed and available in your `_extensions` folder.
+
+> Note: You usually don’t need to install them manually unless you’re setting up a project from scratch.
+
+These extensions are managed centrally and already included in the template. You don’t need to update them manually — we’ll do that as needed.
+
+The implementation of `WebR` in Quarto is described [here](https://github.com/coatless/quarto-webr){target="_blank"}.
+
+To enable `WebR`, ensure your `_quarto.yml` contains the filter entry:
+
+```{webr-r}
+fit = lm(mpg ~ am, data = mtcars)
+
+plot(fit)
+```
+
+::: callout-note
+If WebR does not start properly when opening the HTML file, try refreshing the page or checking your browser’s JavaScript console for blocked scripts. It may also require a modern browser (e.g. latest Firefox or Chrome) to work correctly.
+:::
+
+## JS Elements
+
+- Quarto also supports integrating JavaScript-based elements, often embedded via `<iframe>` for compatibility and layout control.
+
+::: {#fig-js_1}
+<iframe src="documents/projektionslage/js.html" height="540px"></iframe>
+
+Interactive JavaScript Elements ..
+:::
+
+Another example from [Spatial Simulation Chapter 06](https://github.com/UNIGIS-Salzburg/Opt_Spatial-Simulation/blob/master/06-dynamic-landscapes.Rmd){target="_blank"}, which is a bit more complex, as it uses if - else statements to display either the NetLogo Web model or a static image, depending on the output format:
+
+::: {#fig-js_2}
+```{r firespread, echo = FALSE, fig.align='center', out.width= '100%'}
+if (knitr::is_html_output(excludes='epub')) {
+    knitr::include_url("documents/fire_neighbourhood/fire_neighbourhood.html", height = "780px")
+} else {
+    knitr::include_graphics('documents/fire_neighbourhood/fire_neighbourhood.png')
+  }
+```
+
+Explore, how different local process neighbourhoods impact the system-level outcome, NetLogo Web
+:::
+
+- **New in Quarto:** External resources like JS files no longer need to be manually copied. Use the `project > resources` option in `_quarto.yml` to include folders like `documents/` directly. More on this: [Github Discussion](https://github.com/quarto-dev/quarto-cli/issues/3766){target="_blank"} or in the [Quarto Documentation](https://quarto.org/docs/websites/website-tools.html#site-resources){target="_blank"}.
+
+- **Addition:** : All JS files and their associated images are now organized into specific folders within the `documents` directory.
+
+## Cross-referencing Chapters
+
+- *For syntax examples of cross-referencing figures, tables, and sections, see [Cross-references in the Style Guide](#citation){target="_blank"}.*
+
+## HTML Theming
+
+Currently, the cosmo template as well as `theme.scss` is being used (see `theme` in `_quarto.yml`).
+
+Comprehensive options for HTML theming can be found [here](https://quarto.org/docs/output-formats/html-themes.html){target="_blank"}.
+
+## Rendering performance
+
+Rendering in Quarto is thorough by design — but that can also make it feel slow during development. Here's what happens behind the scenes:
+
+When you render the book in RStudio, it may appear slow due to the comprehensive process it undertakes. Rendering involves compiling code, loading images, and executing various contents, which naturally extends the time needed. The primary reason for the perceived delay, however, is how the rendering process is managed:
+
+- **Localhost Server Setup:** Each time you render the book, RStudio initializes a localhost server. This setup involves sending a GET request to fetch data from your PC, which acts as a server at this time. The book content is then rendered and displayed through this local server setup.
+
+- **Network Transfer Overhead:** The initial network transfer, where your PC communicates data via localhost, may introduce slight delays. For instance, our test shows that just the network transfer can take up in one example 2.178 seconds.
+
+![Test - 2.178 Seconds only for the network transfer via localhost](images/performance.PNG){#fig-speedtest1}
+
+- **Idle Time:** A substantial portion of the rendering time is often spent in idle mode, waiting for the next actions or data transfers. This doesn't imply that the book content itself is slow—rather, it's a characteristic of the data handling process during rendering.
+
+- **Rendering is not a Benchmark:** It's important to note that this rendering time is not indicative of the book's performance in a live environment. It's merely a demonstration of the load and compile times during development. **Be aware: This is not a benchmark test! This is just a rough internal illustration of what takes so long.**
+
+If you're looking for a more accurate reflection of how the book will perform for end-users, it's recommended to view the final product directly:
+
+- **Direct HTML Access:** Open the index.html file from the rendered book in your browser. This bypasses the localhost server and offers a more fluid experience navigating between chapters. Below is an example that includes initializing `WebR`, which completes in just 1486 ms for all operations.
+
+![via html file - 1486 ms for literally everything, including initiating WebR via your PC.](images/performance2.PNG){#fig-speedtest2}
+
+::: callout-note
+While WebR is great for interactive examples, it adds a few seconds of load time. Avoid using it in every code chunk — reserve it for places where interactivity really benefits the learner.
+:::

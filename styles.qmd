@@ -1,0 +1,433 @@
+# Styles
+
+::: callout-note
+In this open version, images and icons do not appear if they point to internal branding files.
+:::
+
+
+## Text Styles {#text_styles}
+
+Markdown is the language used to write the content of the Quarto document. It is a lightweight markup language with plain text formatting syntax. The following text styles are available:
+
+-   **Bold** - `**Bold**`
+
+-   *Italic* - `*Italic*`
+
+-   ***Bold and Italic*** - `***Bold and Italic***`
+
+-   ~~Strikethrough~~ - `~~Strikethrough~~`
+
+-   `Code` - `Code`
+
+-   superscript^2^ / subscript~2~ - `superscript^2^ / subscript~2~`
+
+More examples can be found [here](https://quarto.org/docs/authoring/markdown-basics.html#text-formatting){target="_blank"}.
+
+### Collapse and Expand {#collapse_expand}
+
+You can create collapsible sections using native HTML `<details>` blocks, similar to how collapsible panels worked in RMarkdown. This is useful for hiding optional details, background theory, or extended explanations.
+
+```html
+<details closed>
+<summary><ins><strong>Further Information!</strong></ins></summary>
+<p style="color: grey; font-style: italic;">
+
+Additional information...
+
+</p>
+</details>
+```
+
+In Quarto, this renders as...
+
+<details closed>
+<summary><ins><strong>Further Information!</strong></ins></summary>
+<p style="color: grey; font-style: italic;">
+
+Additional information...
+
+</p>
+</details>
+
+For Solutions in Exercise Boxes, the `collapse` option can be used, see [callouts](#callouts) for more details.
+
+## Figures {#figures}
+
+Figures like @fig-plus can also be created using this specific syntax: 
+
+::: {#fig-plus}
+![](branding/pluslogo.jpg)
+
+PLUS Logo; Source: [Website University of Salzburg](https://www.plus.ac.at/communication-and-fundraising/service-for-media/plus-logo/?lang=en){target="_blank"}
+:::
+
+::: callout-note
+The figure can be referenced using the `@fig-...` syntax.  Make sure to assign an ID in the format `#fig-...` to each figure. This is important if you want to apply custom styles from the `.scss` file.
+
+:::
+
+### Figure Divs {#figure-divs}
+
+Multiple figures can be grouped together using the `layout-ncol` option. This allows side-by-side layouts, as shown in `@fig-plus2`.
+
+::: {#fig-plus2 layout-ncol=2}
+![PLUS Logo 1](branding/pluslogo.jpg){#fig-plus2_sub1}
+
+![PLUS Logo 2](branding/pluslogo.jpg){#fig-plus2_sub2}
+
+Here are two logos of the University of Salzburg.
+:::
+
+You can reference the subfigures using the `@fig-plus2_sub1` and `@fig-plus2_sub2` syntax.
+
+For example: @fig-plus2_sub1 und @fig-plus2_sub2 .
+
+- The example above worked because of the `layout-ncol=2` option. This option is used to specify the number of columns in which the figures should be displayed. The default value is 1.
+
+More on this [here](https://quarto.org/docs/authoring/figures.html){target="_blank"}.
+
+And cross-referencing specific syntax you can find [here](https://quarto.org/docs/authoring/cross-references-divs.html#figures){target="_blank"}.
+
+### Best Practice: Why Div Syntax? {#figure-best-practice}
+
+In Pandoc Markdown, it is also possible to define cross-referenceable figures using a simple Markdown syntax:
+
+```markdown
+![PLUS Logo](branding/pluslogo.jpg){#fig-plus}
+```
+
+Although this syntax may work in HTML output, it relies on Quarto’s auto-detection, which isn’t reliable for cross-referencing, especially in PDF or DOCX. For robust results, always use the Div syntax with an explicit figure ID. (auto-float detection), which is not always reliable—especially in PDF, Word, or strict cross-reference use cases.
+
+For this reason, we recommend to **always use the explicit Div Syntax** in your Projects:
+
+```markdown
+::: {#fig-plus}
+![](branding/pluslogo.jpg)
+
+PLUS Logo; Source: [Website University of Salzburg](https://www.plus.ac.at/communication-and-fundraising/service-for-media/plus-logo/?lang=en){target="_blank"}
+:::
+```
+
+This ensures that:
+
+- Figures are consistently recognized across all output formats (HTML, PDF, Word).
+
+- Cross-references using `@fig-...` always work as expected.
+
+- Figure options like subfigures, captions and layout options are easier to configure.
+
+- No dependency on individual user settings or project options.
+
+### How do I change the height or width of a figure? {#figure-height-width}
+
+The width or height of the figure can be adjusted using the `width` or `height` options. For example, to set the width to 50% for the output, you can use the following syntax:
+
+```markdown
+::: {#fig-plus}
+![](branding/pluslogo.jpg){width=50%}
+
+PLUS Logo; Source: [Website University of Salzburg](https://www.plus.ac.at/communication-and-fundraising/service-for-media/plus-logo/?lang=en){target="_blank"}
+:::
+```
+
+### Animated GIFs
+
+Same exact syntax as in the example before, but with `.gif` files:
+
+::: {#fig-gif1}
+![](images/AnimExample.gif){width="50%"}
+
+An Animated Example.
+:::
+
+## Lightbox Feature {#lightbox}
+
+Quarto supports lightbox functionality, allowing users to click on images to enlarge them — especially useful for maps, charts, or other visuals with small text or detailed information.
+
+If you know, you want to use it for ALL of your images, you can set this in the `_quarto.yml` file:
+
+```yaml
+lightbox: true
+```
+
+Or you do that manually for every image:
+
+::: {#fig-plus3}
+![](branding/pluslogo.jpg){.lightbox}
+
+
+PLUS Logo; Source: [Website University of Salzburg](https://www.plus.ac.at/communication-and-fundraising/service-for-media/plus-logo/?lang=en){target="_blank"}
+:::
+
+You can find more information on this [here](https://quarto.org/docs/output-formats/html-lightbox-figures.html){target="_blank"}.
+
+::: callout-note
+The lightbox feature is only available in the HTML output format, as JS is required for this feature to work.
+:::
+
+## Tables {#tables}
+
+Writing markdown tables by hand can be kind of tedious. Accordingly, it is highly recommended to use the [Visual Editor](https://docs.posit.co/ide/user/ide/guide/documents/visual-editor.html){target="_blank"} in RStudio for this task.
+
+In Visual Editor mode you can insert tables by clicking Insert/Table.... Alternatively, you can make use of the `/table` command.
+
+| Col1 | Col2 | Col3 |
+|------|------|------|
+| A    | B    | C    |
+|      |      |      |
+|      |      |      |
+
+: This is a table caption {#tbl-letters}
+
+see @tbl-letters.
+
+2.  Multi tables
+
+::: {#tbl-panel layout-ncol="2"}
+| Col1 | Col2 | Col3 |
+|------|------|------|
+| A    | B    | C    |
+| E    | F    | G    |
+| A    | G    | G    |
+
+: First Table {#tbl-first}
+
+| Col1 | Col2 | Col3 |
+|------|------|------|
+| A    | B    | C    |
+| E    | F    | G    |
+| A    | G    | G    |
+
+: Second Table {#tbl-second}
+
+Main Caption
+:::
+
+See @tbl-panel for details, or @tbl-second.
+
+More on this [here](https://quarto.org/docs/authoring/tables.html){target="_blank"}.
+
+## Code {#code}
+
+Quarto currently supports the **execution of code** in Python, R, Julia, and Observable JavaScript.
+
+In the following R example, the code is displayed but not the result of the computation:
+
+```{r}
+#| output: false
+1 + 1
+```
+
+Looking at the Source Editor, this behavior is achieved using the option `#\| output: false`. More Output Options (see `eval`, `echo` or `warning`) are shown [here](https://quarto.org/docs/computations/execution-options.html){target="_blank"}.
+
+> If Python is used, the package: [`reticulate`](https://cran.r-project.org/web/packages/reticulate/index.html){target="_blank"} must be installed. This allows the use of Python code in Quarto.
+
+The following Python example outputs a result (`#| output: true`).
+
+```{python}
+#| output: true
+a = 3
+for i in range(a):
+  print(i)
+```
+
+By default, code is shown along with its output unless you override it with chunk options like `output: false`. To change this setting across the document, the metadata file `_quarto.yml` can be adjusted (see [Output Options](https://quarto.org/docs/computations/execution-options.html){target="_blank"}).
+
+## Lists {#lists}
+
+[Lists](https://quarto.org/docs/authoring/markdown-basics.html#lists){target="_blank"} are like the standard Markdown code:
+
+1.  [Introduction](/index.html){target="_blank"}
+
+2.  [Styles](/styles.html){target="_blank"}
+
+    1)  [Images](/styles.html#figures){target="_blank"}
+
+-   [Other Styles](/other.html){target="_blank"}
+    -   [References](/references.html){target="_blank"}
+        -   [Code Chunks](#code){target="_blank"}
+
+## Equations {#equations}
+
+[Equations](https://quarto.org/docs/authoring/markdown-basics.html#equations){target="_blank"} are written in LaTeX.
+
+There is a distinction between *Inline Equations:*
+
+*The formula* $y = mx + b$ is important because...
+
+...*and Display Equations:*
+
+$$y = mx + b$$
+
+### Equations with numbering
+
+Equations can be numbered and referenced. For example:
+
+*The calculation of local Moran's* $I_{i}$ (@eq-local-Moran-I) is performed using the formula:
+
+$$
+I_{i} = \frac{x_{i} - \bar{x}}{S_{i}^2} \sum_{j} \omega_{i,j} (x_{j} - \bar{x})
+$$ {#eq-local-Moran-I}
+
+where $x_{i}$ corresponds to the value of the local object for which the local autocorrelation with its neighbors is calculated. $x_{j}$ corresponds to the values of the neighboring objects. $\bar{x}$ is the arithmetic mean of all values ($x_{i}$ and $x_{j}$). $S_{i}^2$ is the variance of the neighbor objects $x_{j}$.
+
+```{=html}
+<!--
+-->
+```
+
+## Callouts {#callouts}
+
+Instead of our `rmdtip`, `rmdcomment`, etc., we now use **callouts** with the `:::` syntax.
+
+The [official Quarto documentation](https://quarto.org/docs/authoring/markdown-basics.html#callout-blocks){target="_blank"} outlines five callout types. For our **UNIGIS Modules**, we focus on **four specific callouts**, which have been adapted via the `custom.css` and `branding` folder.
+
+Please use the following callouts consistently throughout your materials:
+
+- `callout-tip` → **Learning Objectives / Lernziele** (at the beginning of each chapter)
+- `callout-note` → **Note / Hinweis** (in the lecture)
+- `exercisebox` → **Exercises and Solutions / Übung und Lösung** (custom UNIGIS callout)
+- `assignmentbox` → **Assignments / Aufgabe** (custom UNIGIS callout)
+
+If a piece of information doesn’t fit one of the categories above, use a standard **blockquote** via `>` instead. See [Blockquotes](#blockquotes) for details.
+
+### Examples from UNIGIS Modules
+
+::: callout-tip
+Nach Abschluss dieser Lektion sollten Sie in der Lage sein:
+
+- die Definitionen von Geomarketing und seiner Nachbardisziplinen einzuordnen  
+- einen Überblick über die Anwendungsbereiche und Einsatzmöglichkeiten von Geomarketing zu geben  
+- wesentliche Geomarketing-Software und Werkzeuge einzuordnen  
+- die wesentliche Literatur im Bereich Geomarketing zu kennen
+:::
+
+::: callout-note
+Die allgemeine Syntax lokaler Operatoren ist:  
+`NewLayer = LocalFunction of FirstLayer [and NextLayer] ...`
+
+Beispiele:  
+- `mittlererMonatsniederschlag = LocalMean of JanNS and FebNS and MaerzNS and AprilNS ...`  
+- `JahresAmplitude = LocalDifference of JuliTemp and JanuarTemp`
+:::
+
+::: {.exercisebox title="Übung: Was sind die Werte von `any_true` und `all_true` und warum?"}
+Wie gesagt, führt der Interpreter die Befehle von oben nach unten, Zeile für Zeile aus. Weshalb erhalten wir das abschließende Ergebnis **[1] FALSE FALSE  TRUE  TRUE  TRUE**? Versuchen Sie - wie der Interpreter - Zeile für Zeile zu verstehen.
+
+Versuchen Sie, den Prozess nachzuvollziehen, indem Sie die Ausgabe nach jeder Zeile überprüfen. Nutzen Sie `print()` oder schauen Sie im „Environment“-Fenster in RStudio nach. Fügen Sie die folgenden Zeilen hinzu, um zu überprüfen, ob irgendein oder alle Werte die Bedingung erfüllen:
+
+- `any_true <- any(a_numeric_vector_modified >= 3.5)`
+- `all_true <- all(a_numeric_vector_modified >= 3.5)`
+
+Was sind die Werte von `any_true` und `all_true` und warum?
+:::
+
+::: {.exercisebox title="Lösung" collapse="true" appearance="simple"}
+'any_true' nimmt den Wert `TRUE` an, weil zumindest einer der Elemente in 'a_numeric_vector_modified' die Bedingung >= 3.5 erfüllt.
+
+'all_true' nimmt den Wert `FALSE` an, weil nicht alle Elemente in 'a_numeric_vector_modified' die Bedingung >= 3.5 erfüllen.
+:::
+
+::: {.assignmentbox title="Assignment"}
+Bitte bearbeiten Sie die Aufgaben und laden Sie das Lösungsdokument in Moodle hoch.
+
+- [Aufgabe 1 – **Statistische Datenanalyse in R**](){target="_blank"}  
+- Aufgabe 2 – Point Pattern Analysis [**mit Software ArcGIS**](){target="_blank"} oder [**mit R**](){target="_blank"}  
+- [Aufgabe 3 – **Räumliche Autokorrelation**](){target="_blank"}  
+- [Aufgabe 4 – **Variographie und probabilistische Interpolation**](){target="_blank"}
+:::
+
+
+### Notes on Use
+
+- `exercisebox` and `assignmentbox` are **custom UNIGIS callouts** and behave slightly differently under the hood compared to built-in callouts.
+- Use `title="Übung"` or `title="Exercise"` for exercises and `title="Lösung"` or `title="Solution"` for solutions, depending on the module language.
+- Callouts like `tip`, and `note` are **automatically localized** based on the `lang:` settings in your `_quarto.yml`.
+- Use `collapse="true"` in `exercisebox` to **hide solutions by default**. (Note: `assignmentbox` does not support collapsing and should remain always visible.)
+- You can also control visual style with `appearance="simple"` or `"minimal"`.
+- The appearance of `exercisebox` and `assignmentbox` (including icons and colors) is predefined by the UNIGIS team via the `custom.css` and `branding/` folder. Please do not modify these styles manually — consistency across modules is important.
+
+## Blockquotes {#blockquotes}
+
+Blockquotes are also the same as in RMarkdown:
+
+`> Blockquote`
+
+> Blockquote
+
+## iFrames via. Figure Divs {#iframes}
+
+To embed videos or interactive content, we use Quarto’s figure divs with `<iframe>`. These allow for captions, cross-referencing, and responsive layout. It is used to group elements for styling purposes (using the class attribute). In Quarto, we use figure divs (the `:::` syntax) to embed content like videos or maps via `<iframe>`. This approach allows you to include captions, layout options, and cross-references — and it works consistently across outputs.
+
+Please use the following syntax again with the `fig-` ID:
+
+```{}
+::: {#fig-vim_1}
+<iframe src="https://player.vimeo.com/video/890969123?h=3555d68e76" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>
+
+</iframe>
+
+Studying Geoinformatics Online March 2024 - UNIGIS Salzburg
+:::
+```
+
+::: {#fig-vim_1}
+<iframe src="https://player.vimeo.com/video/890969123?h=3555d68e76" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>
+</iframe>
+
+Studying Geoinformatics Online March 2024 - UNIGIS Salzburg
+:::
+
+You can refer to the video [here](%22https://player.vimeo.com/video/890969123?h=3555d68e76){target="_blank"} for more details.
+
+::: callout-note
+Please make sure to **use the correct embed URL**, not the normal video page or file path.
+
+Correct (embed link):  
+`https://player.vimeo.com/video/890969123?h=3555d68e76`
+
+Incorrect (public page URL):  
+`https://vimeo.com/890969123`
+
+To get the embed URL, click **“Share”** on the Vimeo video and copy the link under **“Embed”**, *not* the main video link. The same of course on YouTube or other platforms.
+:::
+
+::: {#fig-storymap}
+<iframe src="https://storymaps.arcgis.com/stories/f2f1fd7844ac47ee8a3429953402e6f7" width="100%" height="600px" allow="fullscreen; picture-in-picture" allowfullscreen>
+
+</iframe>
+
+A Storymap Example from ArcGIS Online.
+:::
+
+Refer to the Storymap in @fig-storymap for more information.
+
+::: callout-note
+If the iframe from ArcGIS Storymaps does not appear when you view the HTML file directly from your file system (using file://), this issue is likely due to ArcGIS’s Content Security Policy (CSP). CSP is a security measure implemented by ArcGIS to control how their content is embedded and displayed, particularly to prevent unauthorized access or misuse. This policy can block the iframe from rendering when not served over a proper HTTP/HTTPS context.
+
+To avoid this issue, you can run your Quarto project using a local server, such as with quarto preview, Python’s http.server, or Node.js’ http-server, which mimics a live web environment. Alternatively, hosting the project online in Moodle also provides the necessary secure context for embedding external content.
+
+More about the policy can be found [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP){target="_blank"}.
+:::
+
+## Citation {#citation}
+
+In the "Visual Editor" - in RStudio, references can be searched on the Internet or in a local Zotero database and inserted by clicking (see Insert/\@ citation... or use command `/Citation`). The BibTeX entries are automatically created in the references.bib file. Still, make sure to manually check the citation content (authors, year, title) for correctness. Nevertheless, like in RMarkdown references can still be inserted manually in `Source Editor Mode`.
+
+[@neuwirth2014]
+
+[@hofmarcher2020]
+
+[@goodchild1997]
+
+@goodchild1997
+
+[@schranz2020]
+
+[@goddard1993]
+
+According to @goodchild1992geographical this is super....
+
+::: callout-tip
+When using the Visual Editor, typing a slash `/` displays the complete Insert functionality of Quarto.
+:::

@@ -1,0 +1,113 @@
+# Prerequisites for Compilation
+
+## Quarto Project
+
+Whereas Bookdown files were organized within an R-Project, Quarto materials should be organized within a [Quarto Project](https://quarto.org/docs/projects/quarto-projects.html){target="_blank"}, which serves a similar purpose to R Projects but uses its own `_quarto.yml` configuration file to manage settings Use this template as a reliable starting point when creating new Quarto-based materials to ensure proper structure.
+
+## Opening a Terminal
+
+To start using Quarto commands, open a terminal. In RStudio, this can be accessed through the "Terminal" tab, where you can use Bash commands to navigate your project. 
+
+- Use `cd <project-path>` to move into your project folder, or `cd <full/path>` if you're navigating from a different location.
+- To go back one level, use `cd ..`.
+- Use `ls` to confirm you are in the correct directory.
+
+![Bash commands](images/quarto1.png){#fig-quarto1 fig-align="center"}
+
+## Installing Quarto Extensions
+
+[Quarto extensions](https://quarto.org/docs/extensions/managing.html){target="_blank"} are add-ons that enhance the functionality of your project, such as custom filters, themes, or templates. If you need a specific extension for your project, such as the `coatless/webr` package for embedding R code on the web, you can easily install it yourself. Here’s how to add and manage extensions in Quarto.
+
+### Navigate to Project Directory
+
+Ensure you are in your Quarto project directory in the terminal.
+
+### Install the Extension
+
+Use the `quarto add` command followed by the extension's repository name. For example, to add the [`coatless/webr`](https://github.com/coatless/quarto-webr){target="_blank"} extension, run:
+
+```bash
+quarto add coatless/webr
+```
+
+Quarto will download and install the extension to your project’s `_extensions` folder, which is typically ignored in version control (as specified in `.gitignore`) to keep the repository clean.
+
+### Verify the Installation
+
+Check that the extension installed successfully by listing all installed extensions:
+
+```bash
+quarto list extensions
+```
+
+---
+
+## Building a Book in Quarto
+
+If you're familiar with Bookdown, you may remember the “Build” tab on the right-hand side. In Quarto, this tab may not be available by default. Quarto must be initialized locally from the command line the first time to enable this tab.
+
+### Quarto Render
+
+Assuming Quarto is installed, you can check the installation by running:
+
+```bash
+quarto --version
+```
+
+To render your project, run:
+
+```bash
+quarto render
+```
+
+This command should activate the “Build” tab in RStudio, enabling you to work with it from here on.
+
+![Quarto Render](images/quarto2.png){#fig-quarto2 fig-align="center"}
+
+### I want to render into .docx or .pdf ...
+
+Quarto can render to various formats, such as HTML, PDF, or Word. To render to a specific format, use the `--to` flag followed by the desired format. For example, to render to PDF, run:
+
+```bash
+quarto render --to pdf
+```
+
+or to render to Word, run:
+
+```bash
+quarto render --to docx
+```
+
+## Using Python
+
+If Python code is used, the following requirements must be met:
+
+### Install Python
+
+> **Note:** These instructions assume you're working on a **Windows system managed by our university's ITS (IT Services) team**. If you're on macOS, Linux, or a privately set up machine, you may need to adjust paths or installation steps accordingly.
+
+### Python.org
+
+Download Python from the [Python website](https://www.python.org/downloads/){target="_blank"} and install the latest version.
+
+![Python.org](images/python1.png){#fig-python1 fig-align="center"}
+
+During installation, ensure “Add Python to PATH” is activated and you have administrator rights.
+
+![Python Installer 1](images/python2.png){#fig-python2 fig-align="center"}
+
+### Set Up in RStudio
+
+Now that Python is installed, set up the interpreter in RStudio under **Tools > Global Options > Python**. Enter the path to your Python installation here.
+
+![RStudio1 - Python Interpreter](images/python5.png){#fig-python5 fig-align="center"}
+
+### Install Reticulate Package
+
+To use Python code in R, install the *Reticulate* package in RStudio:
+
+```r
+install.packages("reticulate")
+```
+
+For more details on combining R and Python in the same project, refer to [this section of the Quarto documentation](https://quarto.org/docs/computations/execution-options.html#engine-binding){target="_blank"}

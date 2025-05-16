@@ -1,0 +1,217 @@
+---
+number-sections: false
+---
+
+# FAQ
+
+This FAQ collects common questions related to transitioning from RMarkdown to Quarto and working within our UNIGIS authoring environment.
+
+## Project Setup & Structure
+
+### Q: How do I migrate from a Bookdown module to the Quarto template?
+
+**A:** Here's the clean and reliable method we recommend:
+
+1. **Download and add the Quarto template**  
+   - Download the [`Main_Template_Quarto`](https://github.com/UNIGIS-Salzburg/Main_Template_Quarto) as a ZIP.
+   - Unzip it into a **subdirectory** inside your root repo — e.g., `quarto/`.
+   - This keeps Quarto isolated and clean. 
+
+2. **Set up your Quarto project**  
+   - Inside `quarto/`, open the `_quarto.yml` file.
+   - Change the module `title`, `author`, `lang`, `toc-title`, and define your chapters under `book > chapters:`.
+   - Rename your `.Rmd` files to `.qmd` and include them in the chapter list.
+   - Optionally include `styles.qmd`, `other.qmd`, `FAQ.qmd`, at the end of the chapter list. `references.qmd` must be the last chapter.
+
+3. **Render the project**  
+   From your terminal, run:
+
+   ```bash
+   cd quarto/
+   quarto render
+   ```
+
+This builds the HTML version in the `quarto/_book/` output directory.
+
+
+For example to change:
+
+```yaml
+book:
+  title: "Your Module Title"
+  author: "Your Name or Team"
+  chapters:
+    - index.qmd
+    - chapter1.qmd
+    - chapter2.qmd
+    - styles.qmd
+    - other.qmd
+    - FAQ.qmd
+    - references.qmd
+
+format:
+  html:
+    lang: de                     # or "en"
+    toc-title: "Lektionsinhalt"  # or "Lesson Content"
+```
+
+If you are done with your module, you can move the Quarto files into the root folder and delete the old `.Rmd` files or store them in a subfolder.
+
+> No need to overwrite anything in the project root — Quarto stays in its own folder. If you need help aligning things or managing chapter structure, just ask Max E. or Christian N.
+
+### Q: I don’t want to delete my RMarkdown files. Where can I keep them while I work on the Quarto version?
+
+**A:** The easiest and safest method is the **subfolder method**:
+
+* Create a subfolder inside your project directory and name it something like `quarto_xyz`.
+* Store all your new Quarto `.qmd` files inside that folder.
+* Your original RMarkdown files remain untouched in the root folder while you transition.
+
+Once you're done and everything works in Quarto, **you can migrate your Quarto files into the root folder**:
+
+* Delete or archive the old `.Rmd` files from the root (keep things like `.Rproj`, `.gitignore`, etc.).
+* Move your `.qmd` files and updated `_quarto.yml` from `quarto_xyz` into the root.
+* Then render the book from the root again to confirm everything works: using `quarto render`.
+
+> *If you're unsure about what to move or delete, feel free to ask Max E. or Christian N. for help.*
+
+### Q: I followed the subfolder method — but `quarto render` doesn’t work. What now?
+
+**A:** If you placed your Quarto files in a subfolder like `quarto/` and are trying to render from RStudio, make sure you're doing the following:
+
+#### Option 1: Render from the terminal
+
+Open the **Terminal tab** in RStudio (not the Console) and run:
+
+```bash
+quarto render quarto/
+```
+
+This will look for the `_quarto.yml` file inside the `quarto/` folder and render everything based on that setup.
+
+#### Option 2: Change into the folder first
+
+Alternatively, navigate into the folder via terminal and render from there:
+
+```bash
+cd quarto
+quarto render
+```
+
+Afterward, if you want to return to the root folder:
+
+```bash
+cd ..
+```
+
+> *Tip:* Use `cd`, `ls`, and `pwd` to navigate. It might feel odd at first, but once you're used to it, you'll be faster than clicking around! Ask Max E. if unsure.
+
+## Language Settings & Callouts
+
+### Q: I set `lang: de`, but my callout titles are still in English. Why?
+
+**A:** Setting `lang: de` in your `_quarto.yml` changes the **document language** (for chapter titles, UI strings, etc.), and it also affects **built-in callout titles** like `tip`, `note`, or `warning` — *if* the translations are defined in the `language:` section:
+
+```yaml
+lang: de
+language:
+  de:
+    callout-tip-title: "Lernziele"
+    callout-note-title: "Beachte"
+    callout-warning-title: "Achtung"
+```
+
+This works **automatically** for the built-in callouts.
+
+However, for **custom callouts** like `exercisebox` or `assignmentbox`, the title is **not auto-translated**. Instead, you **must set the title manually**:
+
+```markdown
+::: {.exercisebox title="Übung"}
+...
+:::
+
+::: {.assignmentbox title="Assignment"}
+...
+:::
+```
+
+This gives you full control over the wording — especially useful when switching between languages.
+
+### Q: Why is the table of contents title still in English even though I changed `lang: de`?
+
+**A:** The Table of Contents (ToC) title is set *manually* in the `_quarto.yml` file under `format > html > toc-title`.
+
+Quarto does **not** automatically translate the ToC label based on `lang:` — you need to **switch the correct line** manually:
+
+```yaml
+# For English modules
+toc-title: "Chapter Overview"
+
+# For German modules
+# toc-title: "Kapitelübersicht"
+```
+
+> Tip: Only one line should be active (the other should remain commented out with `#`).
+
+## Rendering, Preview & Build Tools
+
+### Q: Why don’t I see the *Build Book* tab for Quarto in RStudio?
+
+**A:** This is a common issue and usually caused by leftover settings from an older **Bookdown** project. Here's how to fix it:
+
+1. **Make sure `_bookdown.yml` is deleted** from your project root. RStudio detects `_bookdown.yml` and assumes it’s a Bookdown project, which overrides Quarto behavior.
+
+2. Ensure that you have a `_quarto.yml` file in the **root directory** of your project.
+
+3. Open RStudio and go to: `Tools` → `Project Options` → `Build Tools` → set **Project build tools** to **None**.
+
+4. Restart RStudio.
+
+You should now see the *Build Book* tab in the Build pane — but only if your `_quarto.yml` is in the **project root**.
+
+
+> This does **not** work if your Quarto files are in a subfolder (e.g., `quarto_xyz/`). In that case, you’ll need to use `quarto render` from the Terminal instead.
+
+### Q: What is the actual difference between `quarto render` and `quarto preview`?
+
+**A:** These two commands serve different purposes in the Quarto workflow:
+
+* **`quarto preview`** is for **quick, live feedback** during editing.
+
+  * It launches a local web server and watches your files for changes.
+  * Whenever you save, it re-renders the file and refreshes the browser preview.
+  * It’s useful for fast iteration but may skip post-processing steps.
+
+* **`quarto render`** is for **final, full output generation**.
+
+  * It renders the entire document or book from start to finish.
+  * This includes all pre/post-render hooks, full TOC generation, citations, and cross-references.
+  * It’s the one you’d use before publishing, uploading to Moodle, or zipping an offline version.
+
+> Think of `preview` as a draft view and `render` as the final export.
+
+## Print & Output
+
+### Q: Why don’t we have a Print Button yet?
+
+**A:** The print button is... more complicated than it looks. Sure, adding a little JavaScript with `window.print()` sounds simple on paper — but in practice, it's not that easy.
+
+Quarto’s rendering pipeline is:
+
+```
+.qmd → knitr → markdown → pandoc → HTML/PDF/Docx
+```
+see; [How it works](https://quarto.org/docs/get-started/hello/rstudio.html#how-it-works){target="_blank"}.
+
+So if we want to inject a print button **into the final HTML**, it has to happen *after* rendering — either through JavaScript injected post-build, or by manually editing the output. Neither is ideal. Forcing authors to manually modify HTML before uploading to Moodle would honestly be a nightmare.
+
+And let’s be real: **if we add a print button**, students will expect a **well-designed printable layout** — not just the raw HTML rendered by the browser’s print engine. Without a dedicated stylesheet for print, that expectation can’t be met.
+
+Right now, the only realistic options we can offer are:
+
+* Ask students to use their browser’s print function (`Ctrl + P` or `Cmd + P`)
+* Or download the **offline ZIP version** of the module (which includes all HTML files) and open it locally in a browser — printing works offline too
+
+> Some students still prefer to print entire modules. That’s valid — but unless we build a dedicated print stylesheet and workflow, we can’t support that expectation reliably. And we’d rather be honest about it than ship half-baked support.
+
+Unless the **Quarto dev team** adds native print support or enables it via YAML or Lua filters, it’s not feasible on our end. We'd rather skip the illusion of support than ship something broken or misleading.

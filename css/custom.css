@@ -1,0 +1,105 @@
+/* =======================================================
+   UNIGIS Branding CSS
+   Purpose: Custom styles for callouts, captions and icons
+   ======================================================= */
+
+/* Center-align figure captions */
+.caption {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* ---------------------------------------------
+   Custom Callout: Exercisebox
+   --------------------------------------------- */
+
+/* Green pencil icon – removed in open version */
+/* div.callout-exercisebox.callout-titled .callout-icon::before {
+  background-image: url('../branding/exercise_icon.png');
+} */
+
+/* Main container */
+.callout-exercisebox {
+  border-left-color: #006847 !important; /* UNIGIS green */
+  background-color: #e6f4ea !important; /* Light green background */
+}
+
+/* Header and body styling */
+div.callout-exercisebox > .callout-header,
+div.callout-exercisebox > .callout-body {
+  background-color: #e6f4ea !important;
+}
+
+/* Collapsible behavior (for 'Solution' callouts) */
+div.callout-collapse.collapse.show {
+  background-color: #e6f4ea !important;
+  border-left-color: #006847 !important;
+}
+
+div.callout-collapse.collapse {
+  background-color: #e6f4ea !important;
+}
+
+/* Remove icon from collapsible callouts with simple style */
+div.callout.callout-exercisebox.callout-style-simple .callout-icon-container {
+  display: none;
+}
+
+/* Remove unnecessary left padding in collapsed simple boxes */
+div.callout:not(.no-icon).callout-titled.callout-style-simple .callout-body {
+  padding-left: 0;
+}
+
+/* ---------------------------------------------
+   Custom Callout: Assignmentbox
+   --------------------------------------------- */
+
+/* Red pencil icon – removed in open version */
+/* div.callout-assignmentbox.callout-titled .callout-icon::before {
+  background-image: url('../branding/assignment_icon.png');
+} */
+
+/* Main container */
+.callout-assignmentbox {
+  border-left-color: #FF4500 !important; /* Soft red */
+  background-color: #FFE6E6 !important; /* Light red background */
+}
+
+/* Header and body styling */
+div.callout-assignmentbox > .callout-header,
+div.callout-assignmentbox > .callout-body {
+  background-color: #FFE6E6 !important;
+}
+
+/* ---------------------------------------------
+   Modified Default Callout: Note
+   --------------------------------------------- */
+
+.callout-note {
+  border-left-color: #007BA7 !important; /* Calm blue */
+}
+
+div.callout-note.callout-style-default > .callout-header,
+div.callout-note.callout-style-default > .callout-body {
+  background-color: #e9f2fc; /* Light blue background */
+}
+
+/* ---------------------------------------------
+   Modified Default Callout: Tip
+   --------------------------------------------- */
+
+/* Orange lightbulb icon – removed in open version */
+/* div.callout-tip.callout-titled .callout-icon::before {
+  background-image: url('../branding/tip_icon.png');
+} */
+
+.callout-tip {
+  border-left-color: #FFA500 !important;  /* Bright orange */
+}
+
+div.callout-tip.callout-style-default > .callout-header,
+div.callout-tip.callout-style-default > .callout-body {
+  background-color: #fff4e5; /* Light orange background */
+}

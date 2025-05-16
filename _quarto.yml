@@ -1,0 +1,79 @@
+project:
+  type: book
+
+  resources:
+    # Automatically include static files like images, CSS, JS
+    - "*.png"
+    - "*.jpg"
+    - "*.jpeg"
+    - "*.js"
+    - "*.html"
+    - "*.css"
+    - "*.gitkeep"
+
+book:
+  title: "Template Quarto"
+  author: "Team UNIGIS"
+  date: last-modified
+  page-navigation: true
+
+  chapters:
+    - index.qmd
+    - prerequisities.qmd
+    - styles.qmd
+    - other.qmd
+    - FAQ.qmd
+    - references.qmd
+
+  page-footer:
+    center: "Copyright ©, UNIGIS Salzburg"
+
+  sidebar:
+    search: true
+    # logo: "branding/UNIGIS_Salzburg_Schriftlogo_v05.png" # Removed in open version
+    # logo-href: "https://unigis.at/"
+
+bibliography: references.bib
+
+format:
+  html:
+    css: css/custom.css
+    theme:
+      - cosmo
+      - css/theme.scss
+    # Set this based on the module language:
+    # toc-title: "Lektionsinhalt" # ← Uncomment for German
+    toc-title: "Lesson Content" # ← Default for English
+    toc: true
+    toc-location: right
+    toc-depth: 3
+    code-fold: false
+    highlight: github
+    code-link: true
+    html-math-method: katex
+    smooth-scroll: true
+
+build:
+  commands:
+    - quarto render --to html
+
+custom-callout:
+  exercisebox:
+    icon: true
+  assignmentbox:
+    icon: true
+
+editor: source
+lang: en
+
+language:
+  en:
+    callout-tip-title: "Learning Objectives"
+    callout-note-title: "Note"
+  de:
+    callout-tip-title: "Lernziele"
+    callout-note-title: "Hinweis"
+
+# filters:
+  # - webr # a extension which allows to run R code in a web browser
+  # - custom-callout # a extension which allows to create custom callouts
